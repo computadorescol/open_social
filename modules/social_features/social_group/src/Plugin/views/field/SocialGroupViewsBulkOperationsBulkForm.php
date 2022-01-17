@@ -197,7 +197,12 @@ class SocialGroupViewsBulkOperationsBulkForm extends ViewsBulkOperationsBulkForm
       // Grab all the actions that are available.
       foreach (Element::children($this->actions) as $action) {
         // If the option is not in our selected options, next.
-        if (($action_key = array_search($action, array_column($this->options['selected_actions'], 'action_id'))) === FALSE) {
+        $combined_actions_list = array_combine(
+          array_keys($this->options['selected_actions']),
+          array_column($this->options['selected_actions'], 'action_id')
+        );
+
+        if (($action_key = array_search($action, $combined_actions_list)) === FALSE) {
           continue;
         }
 
