@@ -195,24 +195,30 @@ class SocialGroupViewsBulkOperationsBulkForm extends ViewsBulkOperationsBulkForm
       $user_input = $form_state->getUserInput();
       $available_options = $this->getBulkOptions();
       // Grab all the actions that are available.
+
+      $selected_actions = array_combine(
+        array_keys($this->options['selected_actions']),
+        array_column($this->options['selected_actions'], 'action_id')
+      );
+
       foreach (Element::children($this->actions) as $action) {
-        // If the option is not in our selected options, next.
-        if (($action_key = array_search($action, array_combine(array_keys($this->options['selected_actions']), array_column($this->options['selected_actions'], 'action_id')))) === FALSE) {
-          continue;
-        }
+        // Check if we have the command.
+        if (is_array($selected_actions) &&
+          ($action_key = array_search($action, $selected_actions)) !== FALSE) {
 
-        /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $label */
-        $label = $available_options[$action_key];
+          /** @var \Drupal\Core\StringTranslation\TranslatableMarkup $label */
+          $label = $available_options[$action_key];
 
-        // Match the Users action from our custom dropdown.
-        // Find the action from the VBO selection.
-        // And set that as the chosen action in the form_state.
-        if (strip_tags($label->render()) === $user_input['op']) {
-          $user_input['action'] = $action_key;
-          $form_state->setUserInput($user_input);
-          $form_state->setValue('action', $action_key);
-          $form_state->setTriggeringElement($this->actions[$action]);
-          break;
+          // Match the Users action from our custom dropdown.
+          // Find the action from the VBO selection.
+          // And set that as the chosen action in the form_state.
+          if (strip_tags($label->render()) === $user_input['op']) {
+            $user_input['action'] = $action_key;
+            $form_state->setUserInput($user_input);
+            $form_state->setValue('action', $action_key);
+            $form_state->setTriggeringElement($this->actions[$action]);
+            break;
+          }
         }
       }
     }
