@@ -194,13 +194,13 @@ class SocialGroupViewsBulkOperationsBulkForm extends ViewsBulkOperationsBulkForm
     if ($this->view->id() === 'group_manage_members') {
       $user_input = $form_state->getUserInput();
       $available_options = $this->getBulkOptions();
-      // Grab all the actions that are available.
 
       $selected_actions = array_combine(
         array_keys($this->options['selected_actions']),
         array_column($this->options['selected_actions'], 'action_id')
       );
 
+      // Grab all the actions that are available.
       foreach (Element::children($this->actions) as $action) {
         // Check if we have the command.
         if (is_array($selected_actions) &&
