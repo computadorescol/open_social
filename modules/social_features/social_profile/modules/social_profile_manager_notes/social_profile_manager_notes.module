@@ -92,8 +92,8 @@ function social_profile_manager_notes_theme($existing, $type, $theme, $path) {
  * Implements hook_entity_view_display_alter().
  */
 function social_profile_manager_notes_entity_view_display_alter(EntityViewDisplayInterface $display, array $context): void {
-  if ( $context['entity_type'] === 'profile'
-    &&  $context['view_mode'] === EntityDisplayRepositoryInterface::DEFAULT_DISPLAY_MODE) {
+  if ($context['entity_type'] === 'profile'
+    && $context['view_mode'] === EntityDisplayRepositoryInterface::DEFAULT_DISPLAY_MODE) {
     $display->setComponent('field_manager_notes', [
       'weight' => 6,
       'settings' => [],
