@@ -4,7 +4,7 @@ namespace Drupal\social_private_message\Service;
 
 use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\private_message\Entity\PrivateMessageThreadInterface;
-use Drupal\private_message\Service\PrivateMessageNotifier;
+use Drupal\private_message_notify\Service\PrivateMessageNotifier;
 use Drupal\user\UserInterface;
 
 /**

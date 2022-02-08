@@ -16,10 +16,7 @@ class SocialPrivateMessageServiceProvider extends ServiceProviderBase {
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container) {
-    $modules = $container->getParameter('container.modules');
-    // Check if private_message_notify is installed before we get the definition, otherwise
-    // you get a requested a non-existent service.
-    if (isset($modules['private_message_notify'])) {
+    if ($container->hasDefinition('private_message_notify')) {
       $definition = $container->getDefinition('private_message_notify.notifier');
       $definition->setClass('Drupal\social_private_message\Service\SocialPrivateMessageNotifier');
     }
