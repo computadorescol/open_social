@@ -107,7 +107,7 @@ class MultipleContentBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Generate options based on available plugins as a content type.
     $options = [
-      'all' => t('All'),
+      'all' => $this->t('All'),
     ];
     foreach ($this->getMultipleContentDefinitions() as $definition) {
       $options[$definition['id']] = $definition['label'];
@@ -324,7 +324,7 @@ class MultipleContentBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
-    // Sor by provided sorting field.
+    // Sort by provided sorting field.
     $query->orderBy($sorting, 'DESC');
 
     // Select only specific number of items provided by block configuration.
