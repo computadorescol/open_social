@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Accepts or declines an event enrollment invite.
  *
- * @package Drupal\social_event_invite\Controller
+ * @package Drupal\social_event_max_enroll\Controller
  */
 class UserEnrollInviteControllerAlter extends UserEnrollInviteController {
 
@@ -73,7 +73,7 @@ class UserEnrollInviteControllerAlter extends UserEnrollInviteController {
 
         // If there are no spots left then we should prevent approving
         // invite.
-        if ($left < 1) {
+        if ($left === 0) {
           // Let's delete all messages to keep the messages clean.
           $this->messenger()->deleteAll();
           $this->messenger()->addWarning($this->t('No spots left.'));

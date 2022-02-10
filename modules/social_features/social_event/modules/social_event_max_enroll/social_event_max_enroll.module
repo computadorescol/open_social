@@ -112,7 +112,10 @@ function social_event_max_enroll_form_alter(&$form, FormStateInterface $form_sta
       $node = \Drupal::routeMatch()->getParameter('node');
 
       // If there is node ID instead of an object then load node with NID.
-      if (!$node instanceof NodeInterface && !is_null($node)) {
+      if (
+        !($node instanceof NodeInterface) &&
+        !is_null($node)
+      ) {
         /** @var \Drupal\node\NodeStorageInterface $node_storage */
         $node_storage = \Drupal::entityTypeManager()->getStorage('node');
         /** @var \Drupal\node\NodeInterface $node */
@@ -228,6 +231,11 @@ function social_event_max_enroll_preprocess_page_hero_data(array &$variables) {
  * Implements hook_entity_operation_alter().
  */
 function social_event_max_enroll_entity_operation_alter(array &$operations, EntityInterface $entity): void {
+  // Do nothing if module social_event_invite is not enabled.
+  if (!\Drupal::moduleHandler()->moduleExists('social_event_invite')) {
+    return;
+  }
+
   // Check if the entity type is event_enrollment.
   if ($entity->getEntityTypeId() !== 'event_enrollment') {
     return;
@@ -259,7 +267,7 @@ function social_event_max_enroll_entity_operation_alter(array &$operations, Enti
 
       // If there are no spots left, disable the Accept invite button and add
       // the button title with appropriate notice.
-      if ($left < 1) {
+      if ($left === 0) {
         $operations['accept']['attributes'] = [
           'disabled' => 'disabled',
           'title' => t('No spots left'),
