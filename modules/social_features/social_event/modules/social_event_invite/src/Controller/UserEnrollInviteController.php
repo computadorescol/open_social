@@ -7,6 +7,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\social_event\Entity\EventEnrollment;
 use Drupal\social_event\EventEnrollmentInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -20,7 +21,7 @@ class UserEnrollInviteController extends CancelEnrollInviteController {
   /**
    * {@inheritdoc}
    */
-  public function updateEnrollmentInvite(EventEnrollmentInterface $event_enrollment, string $accept_decline) {
+  public function updateEnrollmentInvite(EventEnrollment $event_enrollment, string $accept_decline) {
     // Just some sanity checks.
     if (!empty($event_enrollment)) {
       // When the user accepted the invite,

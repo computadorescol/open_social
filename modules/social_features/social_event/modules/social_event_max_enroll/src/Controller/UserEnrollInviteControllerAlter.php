@@ -5,7 +5,7 @@ namespace Drupal\social_event_max_enroll\Controller;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\social_event\EventEnrollmentInterface;
+use Drupal\social_event\Entity\EventEnrollment;
 use Drupal\social_event_invite\Controller\UserEnrollInviteController;
 use Drupal\social_event_max_enroll\Service\EventMaxEnrollService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -53,12 +53,10 @@ class UserEnrollInviteControllerAlter extends UserEnrollInviteController {
   /**
    * {@inheritdoc}
    */
-  public function updateEnrollmentInvite(EventEnrollmentInterface $event_enrollment, string $accept_decline): RedirectResponse {
+  public function updateEnrollmentInvite(EventEnrollment $event_enrollment, string $accept_decline): RedirectResponse {
     // We should move forward only when the user is accepting the invite.
     if ($accept_decline === '1') {
-      $event_max_enroll_service = $this->eventMaxEnrollService;
-
-      /** @var \Drupal\social_event\Entity\EventEnrollment $event_enrollment */
+      // Retrieve event ID.
       $event_id = $event_enrollment->getFieldValue('field_event', 'target_id');
 
       /** @var \Drupal\node\NodeInterface $node */
@@ -66,10 +64,10 @@ class UserEnrollInviteControllerAlter extends UserEnrollInviteController {
 
       if (
         $node instanceof NodeInterface &&
-        $event_max_enroll_service->isEnabled($node)
+        $this->eventMaxEnrollService->isEnabled($node)
       ) {
         // Count how many spots are left.
-        $left = $event_max_enroll_service->getEnrollmentsLeft($node);
+        $left = $this->eventMaxEnrollService->getEnrollmentsLeft($node);
 
         // If there are no spots left then we should prevent approving
         // invite.
