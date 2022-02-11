@@ -1137,7 +1137,7 @@ function social_core_menu_links_discovered_alter(array &$links): void {
 
   $front_page_block_id = NULL;
 
-  foreach($block_content as $block_id => $hero_block) {
+  foreach ($block_content as $block_id => $hero_block) {
     // Load block settings for each one of the hero_call_to_action_block blocks.
     $block_settings = \Drupal::entityTypeManager()
       ->getStorage('block')
@@ -1149,6 +1149,7 @@ function social_core_menu_links_discovered_alter(array &$links): void {
         ]
       );
 
+    /** @var \Drupal\block\Entity\Block $block_settings */
     $block_settings = reset($block_settings);
 
     if (
@@ -1160,14 +1161,19 @@ function social_core_menu_links_discovered_alter(array &$links): void {
     }
   }
 
-  $title = $front_page_block_id !== NULL ? 'Customize home page' : 'Create home page hero block';
-  $description = $front_page_block_id !== NULL ? 'Change the image and text on the home page.' : "";
-
-  $links['social_core.dashboard.appearance.active_homepage_configuration'] = [
-    'title' => new TranslatableMarkup($title),
-    'url' => $front_page_block_id !== NULL ? "internal:/block/{$front_page_block_id}" : 'internal:/block/add/hero_call_to_action_block?destination=/admin/structure/block',
-    'description' => new TranslatableMarkup($description),
+  $block_config = [
+    'title' => new TranslatableMarkup('Create home page hero block'),
+    'url' => 'internal:/block/add/hero_call_to_action_block?destination=/admin/structure/block',
+    'description' => new TranslatableMarkup('Creates a new hero block and redirect to block layout page. Home page hero blocks must be placed on hero region'),
     'parent' => 'social_core.dashboard.appearance',
     'weight' => '-90',
   ];
+
+  if ($front_page_block_id !== NULL) {
+    $block_config['title'] = new TranslatableMarkup('Customize home page');
+    $block_config['description'] = new TranslatableMarkup('Change the image and text on the home page.');
+    $block_config['url'] = "internal:/block/{$front_page_block_id}";
+  }
+
+  $links['social_core.dashboard.appearance.active_homepage_configuration'] = $block_config;
 }
